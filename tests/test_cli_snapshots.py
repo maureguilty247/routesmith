@@ -3,7 +3,7 @@
 import pytest
 from typer.testing import CliRunner
 
-from routesmit.cli import app
+from routesmith.cli import app
 
 
 runner = CliRunner()
@@ -88,7 +88,7 @@ class TestCLIDoctor:
     def test_doctor_shows_diagnostics(self):
         result = runner.invoke(app, ["doctor"])
         assert result.exit_code == 0
-        assert "routesmit doctor" in result.output
+        assert "routesmith doctor" in result.output
         assert "Python" in result.output
 
 

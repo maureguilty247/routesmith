@@ -1,10 +1,10 @@
-# routesmit - Copilot Instructions
+# routesmith - Copilot Instructions
 
-This repository contains `routesmit`, a host-aware auto-routing skill library for IDEs and coding agents.
+This repository contains `routesmith`, a host-aware auto-routing skill library for IDEs and coding agents.
 
 ## Core Architecture Rule
 
-routesmit is a HOST-AWARE skill layer, NOT a universal cross-provider broker.
+routesmith is a HOST-AWARE skill layer, NOT a universal cross-provider broker.
 
 - In Claude Code: only Claude-family models are managed.
 - In Codex/OpenAI: only OpenAI-family models are managed.
@@ -21,10 +21,10 @@ routesmit is a HOST-AWARE skill layer, NOT a universal cross-provider broker.
 
 ## Package Structure
 
-- `src/routesmit/` — Main package
-- `src/routesmit/hosts/` — Host adapters (detect, capabilities, switch)
-- `src/routesmit/install/` — Install adapters for generating host configs
-- `src/routesmit/server/` — Stdio server for tool integration
+- `src/routesmith/` — Main package
+- `src/routesmith/hosts/` — Host adapters (detect, capabilities, switch)
+- `src/routesmith/install/` — Install adapters for generating host configs
+- `src/routesmith/server/` — Stdio server for tool integration
 - `tests/` — Test suite (no live API calls required)
 
 ## Testing

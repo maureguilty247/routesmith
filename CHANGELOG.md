@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
 - Deterministic task planner with weighted scoring (no API calls needed)
 - Dependency-aware execution loop with timing and metrics
 - Persistent route state (save/load JSON)
-- Configuration via `.routesmit.toml` and environment variables
+- Configuration via `.routesmith.toml` and environment variables
 - MCP-compatible JSON-RPC 2.0 stdio server
 - Structured observability with JSON logging and `timed()` context manager
 - Route metrics with token economics and effectiveness scoring

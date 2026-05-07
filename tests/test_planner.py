@@ -2,8 +2,8 @@
 
 import pytest
 
-from routesmit.planner import Planner, classify_prompt
-from routesmit.types import CapabilityClass, TaskType
+from routesmith.planner import Planner, classify_prompt
+from routesmith.types import CapabilityClass, TaskType
 
 
 def _types(result: list[tuple[TaskType, float]]) -> list[TaskType]:

@@ -2,13 +2,13 @@
 
 import pytest
 
-from routesmit.hosts.claude_code import ClaudeCodeHostAdapter
-from routesmit.hosts.codex import CodexHostAdapter
-from routesmit.hosts.copilot import CopilotHostAdapter
-from routesmit.hosts.cursor import CursorHostAdapter
-from routesmit.hosts.aider import AiderHostAdapter
-from routesmit.hosts.generic import GenericHostAdapter
-from routesmit.types import CapabilityClass
+from routesmith.hosts.claude_code import ClaudeCodeHostAdapter
+from routesmith.hosts.codex import CodexHostAdapter
+from routesmith.hosts.copilot import CopilotHostAdapter
+from routesmith.hosts.cursor import CursorHostAdapter
+from routesmith.hosts.aider import AiderHostAdapter
+from routesmith.hosts.generic import GenericHostAdapter
+from routesmith.types import CapabilityClass
 
 
 class TestClaudeCodeCapabilities:
@@ -89,7 +89,7 @@ class TestCopilotCapabilities:
         assert self.adapter.get_current_model() is None
 
     def test_prompt_strategy_used(self):
-        from routesmit.types import TaskNode, TaskType
+        from routesmith.types import TaskNode, TaskType
         task = TaskNode(
             id="test",
             type=TaskType.CODING,
@@ -121,7 +121,7 @@ class TestGenericCapabilities:
         assert self.adapter.set_model("anything") is False
 
     def test_prompt_only_strategy(self):
-        from routesmit.types import TaskNode, TaskType
+        from routesmith.types import TaskNode, TaskType
         task = TaskNode(
             id="test",
             type=TaskType.CODING,

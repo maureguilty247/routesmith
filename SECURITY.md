@@ -12,13 +12,15 @@ If you discover a security vulnerability, please report it responsibly.
 
 **Do NOT open a public issue.**
 
-Instead, email: **siddharth.rathore2612@gmail.com**
+Instead, use GitHub private vulnerability reporting:
+
+https://github.com/sidrat2612/routesmith/security/advisories/new
 
 You should receive a response within 72 hours. We will work with you to understand the issue and coordinate a fix before any public disclosure.
 
 ## Scope
 
-routesmit is a routing/planning library that does not:
+routesmith is a routing/planning library that does not:
 - Make network requests to external APIs
 - Store credentials or secrets
 - Execute arbitrary code

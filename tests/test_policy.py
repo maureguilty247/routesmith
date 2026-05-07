@@ -2,13 +2,13 @@
 
 import pytest
 
-from routesmit.policy import (
+from routesmith.policy import (
     TASK_CAPABILITY_MAP,
     get_capability_class,
     get_task_dependencies,
     get_task_priority,
 )
-from routesmit.types import CapabilityClass, TaskType
+from routesmith.types import CapabilityClass, TaskType
 
 
 class TestCapabilityMapping:

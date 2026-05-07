@@ -1,11 +1,11 @@
-"""Property-based tests for routesmit planner using hypothesis-like patterns."""
+"""Property-based tests for routesmith planner using hypothesis-like patterns."""
 
 import string
 
 import pytest
 
-from routesmit.planner import Planner, classify_prompt, CONFIDENCE_THRESHOLD
-from routesmit.types import CapabilityClass, TaskType
+from routesmith.planner import Planner, classify_prompt, CONFIDENCE_THRESHOLD
+from routesmith.types import CapabilityClass, TaskType
 
 
 class TestPlannerProperties:

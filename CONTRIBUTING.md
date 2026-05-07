@@ -1,4 +1,4 @@
-# Contributing to routesmit
+# Contributing to routesmith
 
 Thanks for your interest in contributing! Here's how to get started.
 
@@ -58,11 +58,11 @@ Look for issues labeled [`good first issue`](https://github.com/sidrat2612/route
 
 ## Architecture Notes
 
-- `src/routesmit/hosts/` — Host adapters (one file per host)
-- `src/routesmit/planner.py` — Task decomposition (deterministic, no API calls)
-- `src/routesmit/router.py` — Capability-to-model resolution
-- `src/routesmit/executor.py` — Orchestration loop
-- `src/routesmit/server/` — MCP stdio server
+- `src/routesmith/hosts/` — Host adapters (one file per host)
+- `src/routesmith/planner.py` — Task decomposition (deterministic, no API calls)
+- `src/routesmith/router.py` — Capability-to-model resolution
+- `src/routesmith/executor.py` — Orchestration loop
+- `src/routesmith/server/` — MCP stdio server
 - `tests/` — Test suite
 
 ## Code of Conduct

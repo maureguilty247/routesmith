@@ -27,4 +27,4 @@ jobs:
           pip install -e ".[dev]"
 
       - name: Run tests
-        run: pytest --cov=routesmit --cov-report=term-missing
+        run: pytest --cov=routesmith --cov-report=term-missing

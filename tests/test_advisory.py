@@ -2,14 +2,14 @@
 
 import pytest
 
-from routesmit.advisory import (
+from routesmith.advisory import (
     NO_SWITCH_ADVISORY,
     PINNED_MODEL_ADVISORY,
     SINGLE_TASK_ADVISORY,
     generate_advisory,
 )
-from routesmit.planner import Planner
-from routesmit.types import HostCapabilities, RoutePlan, TaskNode, TaskType, CapabilityClass
+from routesmith.planner import Planner
+from routesmith.types import HostCapabilities, RoutePlan, TaskNode, TaskType, CapabilityClass
 
 
 def _make_capabilities(supports_switch: bool = False) -> HostCapabilities:

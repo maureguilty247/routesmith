@@ -3,7 +3,7 @@
 import pytest
 from typer.testing import CliRunner
 
-from routesmit.cli import app
+from routesmith.cli import app
 
 runner = CliRunner()
 
@@ -14,7 +14,7 @@ class TestCLI:
     def test_help(self):
         result = runner.invoke(app, ["--help"])
         assert result.exit_code == 0
-        assert "routesmit" in result.output.lower() or "host-aware" in result.output.lower()
+        assert "routesmith" in result.output.lower() or "host-aware" in result.output.lower()
 
     def test_explain_command(self):
         result = runner.invoke(app, ["explain", "plan and implement a feature"])
@@ -34,7 +34,7 @@ class TestCLI:
     def test_doctor_command(self):
         result = runner.invoke(app, ["doctor"])
         assert result.exit_code == 0
-        assert "routesmit" in result.output
+        assert "routesmith" in result.output
 
     def test_run_command(self):
         result = runner.invoke(app, ["run", "implement a function"])

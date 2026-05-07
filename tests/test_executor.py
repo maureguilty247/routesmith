@@ -2,8 +2,8 @@
 
 import pytest
 
-from routesmit.executor import Executor
-from routesmit.types import SkillConfig
+from routesmith.executor import Executor
+from routesmith.types import SkillConfig
 
 
 class TestExecutor:

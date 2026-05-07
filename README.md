@@ -1,12 +1,12 @@
 <p align="center">
-  <h1 align="center">routesmit</h1>
+  <h1 align="center">routesmith</h1>
   <p align="center">
     <strong>Host-aware auto-routing for coding agents</strong>
   </p>
   <p align="center">
-    <a href="https://pypi.org/project/routesmit/"><img src="https://img.shields.io/pypi/v/routesmit?color=blue&label=PyPI" alt="PyPI version"></a>
+    <a href="https://pypi.org/project/routesmith/"><img src="https://img.shields.io/pypi/v/routesmith?color=blue&label=PyPI" alt="PyPI version"></a>
     <a href="https://github.com/sidrat2612/routesmith/actions/workflows/ci.yml"><img src="https://github.com/sidrat2612/routesmith/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-    <a href="https://pypi.org/project/routesmit/"><img src="https://img.shields.io/pypi/pyversions/routesmit" alt="Python versions"></a>
+    <a href="https://pypi.org/project/routesmith/"><img src="https://img.shields.io/pypi/pyversions/routesmith" alt="Python versions"></a>
     <a href="https://github.com/sidrat2612/routesmith/blob/main/LICENSE"><img src="https://img.shields.io/github/license/sidrat2612/routesmith" alt="License"></a>
     <a href="https://github.com/sidrat2612/routesmith/stargazers"><img src="https://img.shields.io/github/stars/sidrat2612/routesmith?style=social" alt="Stars"></a>
   </p>
@@ -14,7 +14,7 @@
 
 ---
 
-**routesmit** automatically routes coding agent tasks to the best available model in your IDE — no manual model picking, no cross-provider hacks.
+**routesmith** automatically routes coding agent tasks to the best available model in your IDE — no manual model picking, no cross-provider hacks.
 
 > Give it a mixed prompt like *"Plan this feature, implement it, add tests, write docs"* and it decomposes, routes each step to the right capability class, and executes using your host's native model switching.
 
@@ -22,7 +22,7 @@
 
 Most coding agents are stuck on one model. Mixed tasks (plan → code → test → document) benefit from different model strengths. But each IDE host (Claude Code, Codex, Copilot, Cursor, Aider) has different model families and switching capabilities.
 
-**routesmit solves this** by being host-aware:
+**routesmith solves this** by being host-aware:
 
 | Host | Models | Strategy |
 |------|--------|----------|
@@ -35,41 +35,41 @@ Most coding agents are stuck on one model. Mixed tasks (plan → code → test �
 ## Quickstart
 
 ```bash
-pip install routesmit
+pip install routesmith
 ```
 
 ```python
-import routesmit
+import routesmith
 
 # Auto-detect host, decompose, route, execute
-result = routesmit.run("Plan and implement a REST API with tests")
+result = routesmith.run("Plan and implement a REST API with tests")
 
 # Just see the plan without executing
-plan = routesmit.explain_route("Refactor the database layer")
+plan = routesmith.explain_route("Refactor the database layer")
 
 # Check what you're running on
-host = routesmit.detect_host()
-caps = routesmit.get_host_capabilities()
+host = routesmith.detect_host()
+caps = routesmith.get_host_capabilities()
 ```
 
 ### CLI
 
 ```bash
 # Route a prompt
-routesmit run "Plan this feature, implement it, add tests, and write docs"
+routesmith run "Plan this feature, implement it, add tests, and write docs"
 
 # Preview the route plan
-routesmit explain "Refactor auth module and add integration tests"
+routesmith explain "Refactor auth module and add integration tests"
 
 # Diagnostics
-routesmit detect-host
-routesmit capabilities
-routesmit doctor
+routesmith detect-host
+routesmith capabilities
+routesmith doctor
 ```
 
 ## How It Works
 
-routesmit is an **advisory routing layer** — it plans and recommends, it does not replace your host's execution engine.
+routesmith is an **advisory routing layer** — it plans and recommends, it does not replace your host's execution engine.
 
 ```
 ┌─────────────────────────────────────────┐
@@ -100,11 +100,11 @@ routesmit is an **advisory routing layer** — it plans and recommends, it does 
 
 ### Design Philosophy
 
-Coding agents run inside a host that owns the LLM connection. routesmit sits *alongside* the host as a skill layer that makes smarter routing decisions. It's the routing brain, not the execution muscle.
+Coding agents run inside a host that owns the LLM connection. routesmith sits *alongside* the host as a skill layer that makes smarter routing decisions. It's the routing brain, not the execution muscle.
 
 ## Capability Classes
 
-Instead of hardcoding model names, routesmit uses abstract capability classes:
+Instead of hardcoding model names, routesmith uses abstract capability classes:
 
 | Class | Use Case | Example Models |
 |-------|----------|----------------|
@@ -117,7 +117,7 @@ Each host adapter maps these to actual available models.
 
 ## Task Types
 
-routesmit classifies prompts into: `planning`, `analysis`, `coding`, `testing`, `refactor`, `documentation`, `formatting`, `review`
+routesmith classifies prompts into: `planning`, `analysis`, `coding`, `testing`, `refactor`, `documentation`, `formatting`, `review`
 
 Dependencies are resolved automatically — tests wait for code, docs wait for implementation.
 
@@ -127,46 +127,46 @@ Dependencies are resolved automatically — tests wait for code, docs wait for i
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `ROUTESMIT_DEFAULT_MODE` | Execution mode | `auto` |
-| `ROUTESMIT_ALLOW_MODEL_SWITCH` | Allow model switching | `true` |
-| `ROUTESMIT_FORCE_HOST` | Force a specific host | — |
-| `ROUTESMIT_DEBUG` | Enable debug output | `false` |
+| `ROUTESMITH_DEFAULT_MODE` | Execution mode | `auto` |
+| `ROUTESMITH_ALLOW_MODEL_SWITCH` | Allow model switching | `true` |
+| `ROUTESMITH_FORCE_HOST` | Force a specific host | — |
+| `ROUTESMITH_DEBUG` | Enable debug output | `false` |
 
 ### Config File
 
-Create `.routesmit.toml` in your project root:
+Create `.routesmith.toml` in your project root:
 
 ```toml
-[routesmit]
+[routesmith]
 default_mode = "auto"
 allow_model_switch = true
 ```
 
 ## MCP / Stdio Server
 
-routesmit exposes an MCP-compatible JSON-RPC 2.0 server for tool integration:
+routesmith exposes an MCP-compatible JSON-RPC 2.0 server for tool integration:
 
 ```bash
-routesmit serve-stdio
+routesmith serve-stdio
 ```
 
-This lets IDE extensions and agents call routesmit as a tool.
+This lets IDE extensions and agents call routesmith as a tool.
 
 ## Install Configs for Hosts
 
 Generate host-specific configuration files:
 
 ```bash
-routesmit install claude    # Writes CLAUDE.md
-routesmit install codex     # Writes AGENTS.md
-routesmit install copilot   # Writes .github/copilot-instructions.md
-routesmit install cursor    # Writes .cursorrules
-routesmit install aider     # Writes .aider.conf.yml
+routesmith install claude    # Writes CLAUDE.md
+routesmith install codex     # Writes AGENTS.md
+routesmith install copilot   # Writes .github/copilot-instructions.md
+routesmith install cursor    # Writes .cursorrules
+routesmith install aider     # Writes .aider.conf.yml
 ```
 
 ## Auto Mode (Default)
 
-Auto mode is the default. For a single mixed prompt, routesmit:
+Auto mode is the default. For a single mixed prompt, routesmith:
 
 1. Detects the host environment
 2. Classifies the prompt into task types
@@ -177,8 +177,8 @@ Auto mode is the default. For a single mixed prompt, routesmit:
 
 ### Truthful Switching
 
-- If the host supports dynamic switching → routesmit switches
-- If the host does NOT support switching → routesmit uses prompt strategy
+- If the host supports dynamic switching → routesmith switches
+- If the host does NOT support switching → routesmith uses prompt strategy
 - The result always tells you exactly what happened — no black boxes
 
 ## Contributing

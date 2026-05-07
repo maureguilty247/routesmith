@@ -5,8 +5,8 @@ from unittest.mock import patch
 
 import pytest
 
-from routesmit.hosts.detector import detect_host, get_host_adapter, get_host_capabilities
-from routesmit.types import SkillConfig
+from routesmith.hosts.detector import detect_host, get_host_adapter, get_host_capabilities
+from routesmith.types import SkillConfig
 
 
 class TestHostDetection:

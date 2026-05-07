@@ -2,12 +2,12 @@
 
 import pytest
 
-from routesmit.hosts.claude_code import ClaudeCodeHostAdapter
-from routesmit.hosts.copilot import CopilotHostAdapter
-from routesmit.hosts.generic import GenericHostAdapter
-from routesmit.planner import Planner
-from routesmit.router import Router
-from routesmit.types import CapabilityClass, TaskType
+from routesmith.hosts.claude_code import ClaudeCodeHostAdapter
+from routesmith.hosts.copilot import CopilotHostAdapter
+from routesmith.hosts.generic import GenericHostAdapter
+from routesmith.planner import Planner
+from routesmith.router import Router
+from routesmith.types import CapabilityClass, TaskType
 
 
 class TestRouterWithSwitchableHost:

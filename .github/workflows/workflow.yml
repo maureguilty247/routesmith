@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: testpypi
-      url: https://test.pypi.org/project/routesmit/
+      url: https://test.pypi.org/project/routesmith/
     permissions:
       id-token: write
     steps:
@@ -74,7 +74,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/project/routesmit/
+      url: https://pypi.org/project/routesmith/
     permissions:
       id-token: write
     steps:

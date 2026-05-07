@@ -13,7 +13,7 @@ A clear and concise description of what the bug is.
 ## To Reproduce
 
 Steps to reproduce the behavior:
-1. Run `routesmit ...`
+1. Run `routesmith ...`
 2. With config `...`
 3. See error
 
@@ -25,7 +25,7 @@ What you expected to happen.
 
 - OS: [e.g. macOS 14, Ubuntu 22.04]
 - Python version: [e.g. 3.12]
-- routesmit version: [e.g. 0.1.0]
+- routesmith version: [e.g. 0.1.0]
 - Host IDE: [e.g. Claude Code, Copilot, Cursor]
 
 ## Additional context

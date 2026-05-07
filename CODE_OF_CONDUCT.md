@@ -30,7 +30,10 @@ Examples of unacceptable behavior:
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the project maintainers at siddharth.rathore2612@gmail.com.
+reported to the project maintainers through the repository issue tracker:
+https://github.com/sidrat2612/routesmith/issues
+
+Please avoid posting sensitive personal details in a public report.
 
 All complaints will be reviewed and investigated promptly and fairly.
 

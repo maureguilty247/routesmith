@@ -1,4 +1,4 @@
-"""Integration tests for routesmit - end-to-end pipeline tests with mocked filesystem."""
+"""Integration tests for routesmith - end-to-end pipeline tests with mocked filesystem."""
 
 import json
 import os
@@ -8,12 +8,12 @@ from unittest.mock import patch
 
 import pytest
 
-from routesmit.config import load_config
-from routesmit.executor import Executor
-from routesmit.metrics import RouteMetrics, compute_metrics
-from routesmit.planner import Planner
-from routesmit.state import list_routes, save_route
-from routesmit.types import SkillConfig, TaskType
+from routesmith.config import load_config
+from routesmith.executor import Executor
+from routesmith.metrics import RouteMetrics, compute_metrics
+from routesmith.planner import Planner
+from routesmith.state import list_routes, save_route
+from routesmith.types import SkillConfig, TaskType
 
 
 class TestEndToEndPipeline:
@@ -93,19 +93,19 @@ class TestPersistentState:
 
 
 class TestConfigFile:
-    """Test .routesmit.toml config loading."""
+    """Test .routesmith.toml config loading."""
 
     def test_loads_from_toml(self):
         with tempfile.TemporaryDirectory() as tmpdir:
-            config_content = """[routesmit]
+            config_content = """[routesmith]
 default_mode = "plan"
 debug = true
 show_metrics = false
 """
-            config_path = Path(tmpdir) / ".routesmit.toml"
+            config_path = Path(tmpdir) / ".routesmith.toml"
             config_path.write_text(config_content)
 
-            with patch("routesmit.config.Path.cwd", return_value=Path(tmpdir)):
+            with patch("routesmith.config.Path.cwd", return_value=Path(tmpdir)):
                 config = load_config()
                 assert config.default_mode == "plan"
                 assert config.debug is True
@@ -113,15 +113,15 @@ show_metrics = false
 
     def test_env_overrides_file(self):
         with tempfile.TemporaryDirectory() as tmpdir:
-            config_content = """[routesmit]
+            config_content = """[routesmith]
 default_mode = "plan"
 """
-            config_path = Path(tmpdir) / ".routesmit.toml"
+            config_path = Path(tmpdir) / ".routesmith.toml"
             config_path.write_text(config_content)
 
             with (
-                patch("routesmit.config.Path.cwd", return_value=Path(tmpdir)),
-                patch.dict(os.environ, {"ROUTESMIT_DEFAULT_MODE": "fast"}),
+                patch("routesmith.config.Path.cwd", return_value=Path(tmpdir)),
+                patch.dict(os.environ, {"ROUTESMITH_DEFAULT_MODE": "fast"}),
             ):
                 config = load_config()
                 assert config.default_mode == "fast"
@@ -131,8 +131,8 @@ class TestMetricsComputation:
     """Test the metrics module directly."""
 
     def test_token_savings_calculated(self):
-        from routesmit.types import RoutePlan, TaskNode, TaskResult, HostCapabilities
-        from routesmit.types import CapabilityClass
+        from routesmith.types import RoutePlan, TaskNode, TaskResult, HostCapabilities
+        from routesmith.types import CapabilityClass
 
         plan = RoutePlan(
             original_prompt="plan and implement",
@@ -162,8 +162,8 @@ class TestMetricsComputation:
         assert metrics.total_tasks == 2
 
     def test_effectiveness_score(self):
-        from routesmit.types import RoutePlan, TaskNode, TaskResult, HostCapabilities
-        from routesmit.types import CapabilityClass
+        from routesmith.types import RoutePlan, TaskNode, TaskResult, HostCapabilities
+        from routesmith.types import CapabilityClass
 
         plan = RoutePlan(
             original_prompt="implement",

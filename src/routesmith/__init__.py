@@ -18,6 +18,7 @@ from routesmith.types import (
 )
 from routesmith.executor import Executor
 from routesmith.planner import Planner
+from routesmith.performance import PerformanceTracker
 from routesmith.policy_plugins import BasePolicyPlugin, PolicyPluginContext, PolicyPluginResult
 from routesmith.router import Router
 from routesmith.hosts.detector import detect_host, get_host_capabilities
@@ -64,6 +65,7 @@ __all__ = [
     "PolicyPluginResult",
     "Executor",
     "Planner",
+    "PerformanceTracker",
     "Router",
 ]
 

@@ -2,7 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.1.4] - Unreleased
+## [0.1.5] - Unreleased
+
+### Added
+- Real-time model performance tracking with rolling-window persistence.
+- `PerformanceTracker` class records per-model task outcomes, durations, and success rates.
+- `routesmith stats` CLI command to view model performance tables and advisory.
+- Performance advisory automatically injected into run results when models underperform.
+- `PerformanceTracker` exported from the public API.
+
+### Fixed
+- Gemini CLI adapter no longer returns a hardcoded fallback model when no environment is detected.
+- `SkillConfig.routing_preference` now normalizes input strings (case-insensitive, dash/space tolerant).
+
+## [0.1.4] - 2026-05-07
 
 ### Added
 - GitHub Release badge and direct release asset links in the README.

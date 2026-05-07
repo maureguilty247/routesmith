@@ -238,6 +238,59 @@ def serve_stdio_cmd() -> None:
     run_stdio_server()
 
 
+@app.command("stats")
+def stats_cmd(
+    model: str | None = typer.Option(None, "--model", "-m", help="Filter stats by model name."),
+    clear: bool = typer.Option(False, "--clear", help="Clear all tracked performance data."),
+) -> None:
+    """Show real-time model performance statistics."""
+    from routesmith.performance import PerformanceTracker
+
+    tracker = PerformanceTracker()
+
+    if clear:
+        tracker.clear()
+        console.print("[green]Performance data cleared.[/green]")
+        return
+
+    stats = tracker.get_model_stats(model=model)
+    if not stats:
+        console.print("[dim]No performance data recorded yet. Run some tasks first.[/dim]")
+        return
+
+    table = Table(title="Model Performance")
+    table.add_column("Model", style="cyan")
+    table.add_column("Tasks", justify="right")
+    table.add_column("Success", justify="right", style="green")
+    table.add_column("Fail", justify="right", style="red")
+    table.add_column("Rate", justify="right")
+    table.add_column("Avg (ms)", justify="right")
+    table.add_column("Min (ms)", justify="right")
+    table.add_column("Max (ms)", justify="right")
+
+    for s in stats:
+        rate_color = "green" if s.success_rate >= 0.9 else ("yellow" if s.success_rate >= 0.7 else "red")
+        table.add_row(
+            s.model,
+            str(s.total_tasks),
+            str(s.successes),
+            str(s.failures),
+            f"[{rate_color}]{s.success_rate:.0%}[/{rate_color}]",
+            f"{s.avg_duration_ms:.1f}",
+            f"{s.min_duration_ms:.1f}",
+            f"{s.max_duration_ms:.1f}",
+        )
+
+    console.print(table)
+
+    # Show advisory if any
+    advisory = tracker.get_performance_advisory()
+    if advisory:
+        console.print()
+        for msg in advisory:
+            console.print(f"  [yellow]⚠[/yellow] {msg}")
+
+
 # Install sub-commands
 @install_app.callback(invoke_without_command=True)
 def install_default(

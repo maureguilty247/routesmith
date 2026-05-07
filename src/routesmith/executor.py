@@ -8,6 +8,7 @@ from routesmith.advisory import generate_advisory
 from routesmith.config import load_config
 from routesmith.hosts.detector import detect_host, get_host_adapter
 from routesmith.metrics import RouteMetrics, compute_metrics
+from routesmith.performance import PerformanceTracker
 from routesmith.planner import Planner
 from routesmith.review import review_plan, review_results
 from routesmith.router import Router
@@ -27,6 +28,7 @@ class Executor:
     def __init__(self, config: SkillConfig | None = None) -> None:
         self.config = config or load_config()
         self.planner = Planner()
+        self.performance_tracker = PerformanceTracker()
 
     def explain(self, prompt: str) -> RoutePlan:
         """Explain the route plan without executing."""
@@ -116,6 +118,14 @@ class Executor:
             host=detection.host_name,
             metrics=metrics.model_dump(),
         )
+
+        # Record performance data
+        self.performance_tracker.record_run(plan, task_results)
+
+        # Inject performance advisory
+        perf_advisory = self.performance_tracker.get_performance_advisory()
+        if perf_advisory:
+            result.advisory.extend(perf_advisory)
 
         # Persist route if configured
         if self.config.save_routes:

@@ -145,6 +145,14 @@ Start it with `routesmith serve-stdio`.
 
 This lets IDE extensions and agents call routesmith as a tool.
 
+## Performance Tracking
+
+routesmith records per-model task outcomes (duration, success/failure, capability class) across runs. Data is stored in `.routesmith/performance.json` and accumulates over time within a project.
+
+View stats with `routesmith stats`. Filter to a specific model with `routesmith stats --model claude-sonnet-4-6`. Clear tracked data with `routesmith stats --clear`.
+
+When a model's historical success rate drops below 70% or average latency exceeds 5 seconds, routesmith injects performance advisory messages into run results automatically.
+
 ## Install Configs for Hosts
 
 Generate host-specific configuration files:
@@ -197,7 +205,7 @@ Development setup:
 - [x] Cost-aware routing
 - [x] Python policy plugins
 - [x] Gemini CLI host adapter
-- [ ] Real-time model performance tracking
+- [x] Real-time model performance tracking
 - [ ] Additional host adapters
 
 ## License

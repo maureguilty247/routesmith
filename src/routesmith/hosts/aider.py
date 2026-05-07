@@ -18,19 +18,21 @@ class AiderHostAdapter(BaseHostAdapter):
     """Adapter for Aider coding assistant."""
 
     MODEL_MAP: dict[CapabilityClass, str] = {
-        CapabilityClass.DEEP_REASONING: "claude-opus-4-20250514",
-        CapabilityClass.CODING: "claude-sonnet-4-20250514",
-        CapabilityClass.BALANCED: "claude-sonnet-4-20250514",
-        CapabilityClass.FAST: "claude-haiku-3-5-20241022",
+        CapabilityClass.DEEP_REASONING: "claude-opus-4-7",
+        CapabilityClass.CODING: "gpt-5.3-codex",
+        CapabilityClass.BALANCED: "claude-sonnet-4-6",
+        CapabilityClass.FAST: "claude-haiku-4-5",
     }
 
     AVAILABLE_MODELS = [
-        "claude-opus-4-20250514",
-        "claude-sonnet-4-20250514",
-        "claude-haiku-3-5-20241022",
-        "gpt-4.1",
-        "gpt-4.1-mini",
-        "o3",
+        "claude-opus-4-7",
+        "claude-sonnet-4-6",
+        "claude-haiku-4-5",
+        "gpt-5.5",
+        "gpt-5.4",
+        "gpt-5.4-mini",
+        "gpt-5.3-codex",
+        "gemini-3.1-pro",
     ]
 
     def detect(self) -> HostDetectionResult:

@@ -1,5 +1,8 @@
 """routesmith - Host-aware auto-routing skill library for IDEs and coding agents."""
 
+from importlib.metadata import PackageNotFoundError, version as package_version
+from pathlib import Path
+
 from routesmith.types import (
     CapabilityClass,
     HostCapabilities,
@@ -17,7 +20,25 @@ from routesmith.planner import Planner
 from routesmith.router import Router
 from routesmith.hosts.detector import detect_host, get_host_capabilities
 
-__version__ = "0.1.0"
+
+def _read_version_from_pyproject() -> str:
+    """Fallback to pyproject.toml when package metadata is unavailable."""
+    pyproject_path = Path(__file__).resolve().parents[2] / "pyproject.toml"
+    try:
+        for line in pyproject_path.read_text(encoding="utf-8").splitlines():
+            stripped = line.strip()
+            if stripped.startswith("version = "):
+                return stripped.split("=", 1)[1].strip().strip('"').strip("'")
+    except OSError:
+        pass
+    return "0.1.1"
+
+
+try:
+    __version__ = package_version("routesmith")
+except PackageNotFoundError:
+    __version__ = _read_version_from_pyproject()
+
 __all__ = [
     "run",
     "explain_route",

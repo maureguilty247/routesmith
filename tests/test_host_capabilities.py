@@ -36,7 +36,7 @@ class TestClaudeCodeCapabilities:
             assert "claude" in model.lower()
 
     def test_set_model_known_model(self):
-        assert self.adapter.set_model("claude-sonnet-4-20250514") is True
+        assert self.adapter.set_model("claude-sonnet-4-6") is True
 
     def test_set_model_unknown_model(self):
         assert self.adapter.set_model("gpt-4") is False

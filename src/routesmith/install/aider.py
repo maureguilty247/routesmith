@@ -10,13 +10,13 @@ AIDER_CONF_CONTENT = """\
 # Aider supports model switching via --model flag
 
 # Recommended model for mixed tasks:
-# model: claude-sonnet-4-20250514
+# model: claude-sonnet-4-6
 
 # For planning-heavy tasks:
-# model: claude-opus-4-20250514
+# model: claude-opus-4-7
 
 # For fast formatting:
-# model: claude-haiku-3-5-20241022
+# model: claude-haiku-4-5
 """
 
 AIDERIGNORE_ADDITION = """\

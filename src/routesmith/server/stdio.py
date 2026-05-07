@@ -6,6 +6,7 @@ import json
 import sys
 from typing import Any
 
+from routesmith import __version__
 from routesmith.config import load_config
 from routesmith.executor import Executor
 from routesmith.hosts.detector import detect_host, get_host_capabilities
@@ -75,7 +76,7 @@ def handle_request(request: dict[str, Any]) -> dict[str, Any]:
             return _success(req_id, {
                 "protocolVersion": "2024-11-05",
                 "capabilities": {"tools": {}},
-                "serverInfo": {"name": "routesmith", "version": "0.1.0"},
+                "serverInfo": {"name": "routesmith", "version": __version__},
             })
 
         elif method == "notifications/initialized":
@@ -113,7 +114,7 @@ def handle_request(request: dict[str, Any]) -> dict[str, Any]:
             return _success(req_id, caps.model_dump())
 
         elif method == "ping":
-            return _success(req_id, {"status": "ok", "version": "0.1.0"})
+            return _success(req_id, {"status": "ok", "version": __version__})
 
         else:
             return _error(req_id, -32601, f"Unknown method: {method}")

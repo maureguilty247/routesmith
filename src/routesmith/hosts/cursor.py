@@ -18,17 +18,19 @@ class CursorHostAdapter(BaseHostAdapter):
     """Adapter for Cursor IDE."""
 
     MODEL_MAP: dict[CapabilityClass, str] = {
-        CapabilityClass.DEEP_REASONING: "claude-sonnet-4",
-        CapabilityClass.CODING: "claude-sonnet-4",
-        CapabilityClass.BALANCED: "gpt-4.1",
-        CapabilityClass.FAST: "cursor-small",
+        CapabilityClass.DEEP_REASONING: "claude-opus-4.7",
+        CapabilityClass.CODING: "gpt-5.3-codex",
+        CapabilityClass.BALANCED: "claude-sonnet-4.6",
+        CapabilityClass.FAST: "composer-2",
     }
 
     AVAILABLE_MODELS = [
-        "claude-sonnet-4",
-        "gpt-4.1",
-        "gpt-4.1-mini",
-        "cursor-small",
+        "claude-opus-4.7",
+        "claude-sonnet-4.6",
+        "gpt-5.5",
+        "gpt-5.3-codex",
+        "gemini-3.1-pro",
+        "composer-2",
     ]
 
     def detect(self) -> HostDetectionResult:

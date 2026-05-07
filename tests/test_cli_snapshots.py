@@ -38,9 +38,9 @@ class TestCLIRun:
         assert "Model Usage" in result.output
 
     def test_run_with_model_flag(self):
-        result = runner.invoke(app, ["run", "--model", "claude-sonnet-4-20250514", "implement"])
+        result = runner.invoke(app, ["run", "--model", "claude-sonnet-4-6", "implement"])
         assert result.exit_code == 0
-        assert "claude-sonnet-4-20250514" in result.output
+        assert "claude-sonnet-4-6" in result.output
 
 
 class TestCLIExplain:

@@ -38,9 +38,9 @@ class TestEndToEndPipeline:
     def test_run_with_pinned_model(self):
         config = SkillConfig()
         executor = Executor(config=config)
-        result = executor.run("implement a function", model="claude-sonnet-4-20250514")
+        result = executor.run("implement a function", model="claude-sonnet-4-6")
         # When host supports switching: model_used matches. Otherwise: advisory mentions pinned model.
-        has_model = any("claude-sonnet-4-20250514" in (task.model_used or "") for task in result.tasks)
+        has_model = any("claude-sonnet-4-6" in (task.model_used or "") for task in result.tasks)
         has_advisory = any("Pinned model" in msg for msg in result.advisory)
         assert has_model or has_advisory
 

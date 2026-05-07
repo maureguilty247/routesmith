@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.1] - 2026-05-07
+
+### Changed
+- Refreshed host model mappings and README examples to current public model lineups.
+- Centralized runtime version reporting so package metadata and server responses stay in sync with `pyproject.toml`.
+
 ## [0.1.0] - 2026-05-07
 
 ### Added

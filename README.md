@@ -26,11 +26,11 @@ Most coding agents are stuck on one model. Mixed tasks (plan → code → test �
 
 | Host | Models | Strategy |
 |------|--------|----------|
-| Claude Code | Opus / Sonnet / Haiku | Dynamic model switching |
-| Codex | o3 / codex-mini / GPT-4.1 | Dynamic model switching |
-| Copilot | Host-controlled | Prompt optimization |
-| Cursor | User-controlled | Prompt optimization |
-| Aider | Multi-provider | Dynamic model switching |
+| Claude Code | Claude Opus 4.7 / Sonnet 4.6 / Haiku 4.5 | Dynamic model switching |
+| Codex | GPT-5.5 / GPT-5.4 / GPT-5.3-Codex | Dynamic model switching |
+| Copilot | Claude 4.7 / GPT-5.5 / Gemini 3.1 Pro (plan-dependent) | Prompt optimization |
+| Cursor | Claude 4.7 / GPT-5.5 / GPT-5.3-Codex / Gemini 3.1 Pro | Prompt optimization |
+| Aider | Claude 4.7 / GPT-5.5 / Gemini 3.1 Pro | Dynamic model switching |
 
 ## Quickstart
 
@@ -108,10 +108,10 @@ Instead of hardcoding model names, routesmith uses abstract capability classes:
 
 | Class | Use Case | Example Models |
 |-------|----------|----------------|
-| `deep_reasoning` | Planning, architecture, review | Claude Opus, o3 |
-| `coding` | Implementation, testing, refactoring | Claude Sonnet, codex-mini |
-| `balanced` | Documentation, general tasks | Claude Sonnet, GPT-4.1 |
-| `fast` | Formatting, simple transforms | Claude Haiku, GPT-4.1-mini |
+| `deep_reasoning` | Planning, architecture, review | Claude Opus 4.7, GPT-5.5 |
+| `coding` | Implementation, testing, refactoring | Claude Sonnet 4.6, GPT-5.3-Codex |
+| `balanced` | Documentation, general tasks | Claude Sonnet 4.6, GPT-5.4 |
+| `fast` | Formatting, simple transforms | Claude Haiku 4.5, GPT-5.4-mini |
 
 Each host adapter maps these to actual available models.
 

@@ -19,6 +19,12 @@ routesmith is a HOST-AWARE skill layer, NOT a universal cross-provider broker.
 4. **Graceful fallback** — If switching is unsupported, use prompt strategy.
 5. **Deterministic planning** — Planner works without API calls.
 
+## Versioning Rule
+
+- Any code change must also update the package version in `pyproject.toml`.
+- Do not leave behavior-changing code edits at the same published version.
+- When making code changes, treat the version bump as part of the same change.
+
 ## Package Structure
 
 - `src/routesmith/` — Main package

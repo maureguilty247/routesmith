@@ -18,18 +18,18 @@ class CodexHostAdapter(BaseHostAdapter):
     """Adapter for OpenAI Codex CLI / OpenAI-native environments."""
 
     MODEL_MAP: dict[CapabilityClass, str] = {
-        CapabilityClass.DEEP_REASONING: "o3",
-        CapabilityClass.CODING: "codex-mini",
-        CapabilityClass.BALANCED: "gpt-4.1",
-        CapabilityClass.FAST: "gpt-4.1-mini",
+        CapabilityClass.DEEP_REASONING: "gpt-5.5",
+        CapabilityClass.CODING: "gpt-5.3-codex",
+        CapabilityClass.BALANCED: "gpt-5.4",
+        CapabilityClass.FAST: "gpt-5.4-mini",
     }
 
     AVAILABLE_MODELS = [
-        "o3",
-        "codex-mini",
-        "gpt-4.1",
-        "gpt-4.1-mini",
-        "gpt-4.1-nano",
+        "gpt-5.5",
+        "gpt-5.4",
+        "gpt-5.4-mini",
+        "gpt-5.3-codex",
+        "gpt-5.3-codex-spark",
     ]
 
     def detect(self) -> HostDetectionResult:
@@ -80,6 +80,7 @@ class CodexHostAdapter(BaseHostAdapter):
             notes=[
                 "Codex supports OpenAI-family models only.",
                 "Model can be set via CLI flags or environment.",
+                "GPT-5.5 is current top-end when available; GPT-5.4 is the broad fallback.",
                 "AGENTS.md repo instructions are supported.",
             ],
         )
@@ -93,7 +94,7 @@ class CodexHostAdapter(BaseHostAdapter):
         model = os.environ.get("CODEX_MODEL") or os.environ.get("OPENAI_MODEL")
         if model:
             return model
-        return "codex-mini"
+        return "gpt-5.4"
 
     def get_available_models(self) -> list[str]:
         """Get available OpenAI models."""
@@ -134,13 +135,16 @@ class CodexHostAdapter(BaseHostAdapter):
     def apply_prompt_strategy(self, task: TaskNode) -> dict:
         """Generate Codex-specific prompt strategy."""
         model = self.resolve_capability_class(task.preferred_capability_class)
+        hints = [
+            f"Use {model} for {task.type.value} tasks.",
+            f"Codex supports switching to this model via --model flag.",
+        ]
+        if model == "gpt-5.5":
+            hints.append("If GPT-5.5 is unavailable in your account, fall back to gpt-5.4.")
         return {
             "task_id": task.id,
             "task_type": task.type.value,
             "strategy": "model_switch",
             "target_model": model,
-            "hints": [
-                f"Use {model} for {task.type.value} tasks.",
-                f"Codex supports switching to this model via --model flag.",
-            ],
+            "hints": hints,
         }

@@ -19,16 +19,16 @@ class ClaudeCodeHostAdapter(BaseHostAdapter):
 
     # Claude-family model mapping by capability class
     MODEL_MAP: dict[CapabilityClass, str] = {
-        CapabilityClass.DEEP_REASONING: "claude-opus-4-20250514",
-        CapabilityClass.CODING: "claude-sonnet-4-20250514",
-        CapabilityClass.BALANCED: "claude-sonnet-4-20250514",
-        CapabilityClass.FAST: "claude-haiku-3-5-20241022",
+        CapabilityClass.DEEP_REASONING: "claude-opus-4-7",
+        CapabilityClass.CODING: "claude-sonnet-4-6",
+        CapabilityClass.BALANCED: "claude-sonnet-4-6",
+        CapabilityClass.FAST: "claude-haiku-4-5",
     }
 
     AVAILABLE_MODELS = [
-        "claude-opus-4-20250514",
-        "claude-sonnet-4-20250514",
-        "claude-haiku-3-5-20241022",
+        "claude-opus-4-7",
+        "claude-sonnet-4-6",
+        "claude-haiku-4-5",
     ]
 
     def detect(self) -> HostDetectionResult:
@@ -95,7 +95,7 @@ class ClaudeCodeHostAdapter(BaseHostAdapter):
         if model:
             return model
         # Default assumption for Claude Code
-        return "claude-sonnet-4-20250514"
+        return "claude-sonnet-4-6"
 
     def get_available_models(self) -> list[str]:
         """Get available Claude models."""

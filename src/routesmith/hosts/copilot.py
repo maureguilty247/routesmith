@@ -20,17 +20,19 @@ class CopilotHostAdapter(BaseHostAdapter):
 
     # Copilot may expose multiple models but switching is host-controlled
     MODEL_MAP: dict[CapabilityClass, str] = {
-        CapabilityClass.DEEP_REASONING: "claude-sonnet-4",
-        CapabilityClass.CODING: "claude-sonnet-4",
-        CapabilityClass.BALANCED: "gpt-4.1",
-        CapabilityClass.FAST: "gpt-4.1-mini",
+        CapabilityClass.DEEP_REASONING: "claude-opus-4.7",
+        CapabilityClass.CODING: "claude-sonnet-4.6",
+        CapabilityClass.BALANCED: "gpt-5.4",
+        CapabilityClass.FAST: "gpt-5-mini",
     }
 
     AVAILABLE_MODELS = [
-        "claude-sonnet-4",
-        "gpt-4.1",
-        "gpt-4.1-mini",
-        "o3-mini",
+        "claude-opus-4.7",
+        "claude-sonnet-4.6",
+        "gpt-5.5",
+        "gpt-5.4",
+        "gpt-5-mini",
+        "gemini-3.1-pro",
     ]
 
     def detect(self) -> HostDetectionResult:
@@ -80,6 +82,7 @@ class CopilotHostAdapter(BaseHostAdapter):
             model_family="mixed",
             notes=[
                 "Copilot model selection is controlled by the host IDE.",
+                "Available models vary by Copilot plan and rollout stage.",
                 "Direct model switching from skill code is not reliably supported.",
                 "Use .github/copilot-instructions.md and prompt files for guidance.",
                 "Task decomposition and prompt optimization are the primary strategies.",

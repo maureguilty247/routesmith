@@ -28,6 +28,7 @@ def _get_installers() -> dict[str, type[BaseInstaller]]:
     """Get all available installers."""
     from routesmith.install.claude import ClaudeInstaller
     from routesmith.install.codex import CodexInstaller
+    from routesmith.install.gemini import GeminiInstaller
     from routesmith.install.copilot import CopilotInstaller
     from routesmith.install.cursor import CursorInstaller
     from routesmith.install.vscode import VSCodeInstaller
@@ -37,6 +38,7 @@ def _get_installers() -> dict[str, type[BaseInstaller]]:
     return {
         "claude": ClaudeInstaller,
         "codex": CodexInstaller,
+        "gemini": GeminiInstaller,
         "copilot": CopilotInstaller,
         "cursor": CursorInstaller,
         "vscode": VSCodeInstaller,

@@ -4,6 +4,7 @@ import pytest
 
 from routesmith.hosts.claude_code import ClaudeCodeHostAdapter
 from routesmith.hosts.codex import CodexHostAdapter
+from routesmith.hosts.gemini_cli import GeminiCLIHostAdapter
 from routesmith.hosts.copilot import CopilotHostAdapter
 from routesmith.hosts.cursor import CursorHostAdapter
 from routesmith.hosts.aider import AiderHostAdapter
@@ -71,6 +72,31 @@ class TestCodexCapabilities:
         for cap in CapabilityClass:
             model = self.adapter.resolve_capability_class(cap)
             assert "claude" not in model.lower()
+
+
+class TestGeminiCapabilities:
+    """Test Gemini CLI host adapter."""
+
+    def setup_method(self):
+        self.adapter = GeminiCLIHostAdapter()
+
+    def test_model_family_is_google(self):
+        caps = self.adapter.get_capabilities()
+        assert caps.model_family == "google"
+
+    def test_supports_dynamic_switch(self):
+        assert self.adapter.supports_dynamic_switch() is True
+
+    def test_available_models_are_gemini_only(self):
+        models = self.adapter.get_available_models()
+        for model in models:
+            assert "gemini" in model.lower()
+
+    def test_resolves_capability_classes(self):
+        for cap in CapabilityClass:
+            model = self.adapter.resolve_capability_class(cap)
+            assert model is not None
+            assert "gemini" in model.lower()
 
 
 class TestCopilotCapabilities:

@@ -1,13 +1,11 @@
 """Tests for the router."""
 
-import pytest
-
 from routesmith.hosts.claude_code import ClaudeCodeHostAdapter
 from routesmith.hosts.copilot import CopilotHostAdapter
 from routesmith.hosts.generic import GenericHostAdapter
 from routesmith.planner import Planner
 from routesmith.router import Router
-from routesmith.types import CapabilityClass, TaskType
+from routesmith.types import CapabilityClass, RoutingPreference, TaskType
 
 
 class TestRouterWithSwitchableHost:
@@ -50,6 +48,61 @@ class TestRouterWithSwitchableHost:
         for msg in resolved.advisory:
             assert "does not support dynamic model switching" not in msg
 
+    def test_task_type_policy_override_changes_model(self):
+        router = Router(self.adapter, policy_overrides={"planning": "balanced"})
+        plan = self.planner.plan("plan the architecture", host_name="claude_code")
+        resolved = router.resolve_plan(plan)
+
+        planning_tasks = [t for t in resolved.tasks if t.type == TaskType.PLANNING]
+        assert planning_tasks
+        assert planning_tasks[0].preferred_capability_class == CapabilityClass.BALANCED
+        assert planning_tasks[0].suggested_model == self.adapter.resolve_capability_class(
+            CapabilityClass.BALANCED
+        )
+        assert any("Applied policy override for planning" in msg for msg in resolved.advisory)
+
+    def test_capability_override_changes_model(self):
+        router = Router(self.adapter, policy_overrides={"deep_reasoning": "coding"})
+        plan = self.planner.plan("plan the architecture", host_name="claude_code")
+        resolved = router.resolve_plan(plan)
+
+        planning_tasks = [t for t in resolved.tasks if t.type == TaskType.PLANNING]
+        assert planning_tasks
+        assert planning_tasks[0].preferred_capability_class == CapabilityClass.CODING
+        assert planning_tasks[0].suggested_model == self.adapter.resolve_capability_class(
+            CapabilityClass.CODING
+        )
+        assert any(
+            "Applied capability override for deep_reasoning" in msg
+            for msg in resolved.advisory
+        )
+
+    def test_cost_routing_downgrades_planning_to_balanced(self):
+        router = Router(self.adapter, routing_preference=RoutingPreference.COST)
+        plan = self.planner.plan("plan the architecture", host_name="claude_code")
+        resolved = router.resolve_plan(plan)
+
+        planning_tasks = [t for t in resolved.tasks if t.type == TaskType.PLANNING]
+        assert planning_tasks
+        assert planning_tasks[0].preferred_capability_class == CapabilityClass.BALANCED
+        assert planning_tasks[0].suggested_model == self.adapter.resolve_capability_class(
+            CapabilityClass.BALANCED
+        )
+        assert any("Applied cost-aware routing for planning" in msg for msg in resolved.advisory)
+
+    def test_python_policy_plugin_can_override_model(self):
+        router = Router(
+            self.adapter,
+            policy_plugins=["tests.sample_policy_plugin:PreferFastClaudeCodingPlugin"],
+        )
+        plan = self.planner.plan("implement a function", host_name="claude_code")
+        resolved = router.resolve_plan(plan)
+
+        coding_tasks = [t for t in resolved.tasks if t.type == TaskType.CODING]
+        assert coding_tasks
+        assert coding_tasks[0].suggested_model == "claude-haiku-4-5"
+        assert any("[prefer_fast_claude_coding]" in msg for msg in resolved.advisory)
+
 
 class TestRouterWithNonSwitchableHost:
     """Test router with a host that does NOT support dynamic switching."""
@@ -79,6 +132,26 @@ class TestRouterWithNonSwitchableHost:
 
         for strategy in strategies:
             assert strategy["strategy"] == "prompt_optimization"
+
+    def test_policy_override_changes_prompt_strategy_target(self):
+        router = Router(self.adapter, policy_overrides={"documentation": "fast"})
+        plan = self.planner.plan("write docs for this feature", host_name="copilot")
+        resolved = router.resolve_plan(plan)
+
+        documentation_tasks = [t for t in resolved.tasks if t.type == TaskType.DOCUMENTATION]
+        assert documentation_tasks
+        assert documentation_tasks[0].preferred_capability_class == CapabilityClass.FAST
+        assert any("Applied policy override for documentation" in msg for msg in resolved.advisory)
+
+    def test_quality_routing_upgrades_docs_capability(self):
+        router = Router(self.adapter, routing_preference=RoutingPreference.QUALITY)
+        plan = self.planner.plan("write docs for this feature", host_name="copilot")
+        resolved = router.resolve_plan(plan)
+
+        documentation_tasks = [t for t in resolved.tasks if t.type == TaskType.DOCUMENTATION]
+        assert documentation_tasks
+        assert documentation_tasks[0].preferred_capability_class == CapabilityClass.CODING
+        assert any("Applied quality-first routing for documentation" in msg for msg in resolved.advisory)
 
 
 class TestRouterWithGenericHost:

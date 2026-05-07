@@ -39,27 +39,50 @@ def _parse_toml(path: Path) -> dict[str, Any]:
 def _parse_toml_fallback(path: Path) -> dict[str, Any]:
     """Minimal TOML parser for simple key = value files."""
     result: dict[str, Any] = {}
-    in_section = False
+    current_section: list[str] | None = None
+
+    def _parse_value(raw_value: str) -> Any:
+        value = raw_value.strip()
+        if value.startswith("[") and value.endswith("]"):
+            inner = value[1:-1].strip()
+            if not inner:
+                return []
+            return [item.strip().strip('"').strip("'") for item in inner.split(",") if item.strip()]
+        value = value.strip('"').strip("'")
+        if value.lower() in ("true", "false"):
+            return value.lower() == "true"
+        if value.isdigit():
+            return int(value)
+        return value
+
+    def _get_section_target(section: list[str]) -> dict[str, Any]:
+        target = result
+        for part in section:
+            target = target.setdefault(part, {})
+        return target
+
     for line in path.read_text().splitlines():
         line = line.strip()
-        if line == "[routesmith]":
-            in_section = True
+        if not line or line.startswith("#"):
             continue
-        if line.startswith("["):
-            in_section = False
+
+        if line.startswith("[") and line.endswith("]"):
+            section_name = line[1:-1].strip()
+            if section_name == "routesmith":
+                current_section = []
+            elif section_name.startswith("routesmith."):
+                current_section = section_name.split(".")[1:]
+            else:
+                current_section = None
             continue
-        if not in_section or not line or line.startswith("#"):
+
+        if current_section is None:
             continue
+
         if "=" in line:
             key, _, value = line.partition("=")
             key = key.strip()
-            value = value.strip().strip('"').strip("'")
-            if value.lower() in ("true", "false"):
-                result[key] = value.lower() == "true"
-            elif value.isdigit():
-                result[key] = int(value)
-            else:
-                result[key] = value
+            _get_section_target(current_section)[key] = _parse_value(value)
     return result
 
 
@@ -81,6 +104,8 @@ def load_config() -> SkillConfig:
         if env_val is not None:
             if cast == bool:
                 return env_val.lower() in ("true", "1", "yes")
+            if cast == list:
+                return [item.strip() for item in env_val.split(",") if item.strip()]
             return cast(env_val)
         if key in file_config:
             return file_config[key]
@@ -89,6 +114,7 @@ def load_config() -> SkillConfig:
     return SkillConfig(
         default_mode=_get("default_mode", "ROUTESMITH_DEFAULT_MODE", "auto"),
         allow_model_switch=_get("allow_model_switch", "ROUTESMITH_ALLOW_MODEL_SWITCH", True, bool),
+        routing_preference=_get("routing_preference", "ROUTESMITH_ROUTING_PREFERENCE", "balanced"),
         debug=_get("debug", "ROUTESMITH_DEBUG", False, bool),
         telemetry_enabled=_get("telemetry_enabled", "ROUTESMITH_ENABLE_TELEMETRY", False, bool),
         forced_host=_get("forced_host", "ROUTESMITH_FORCE_HOST", None) or None,
@@ -98,4 +124,5 @@ def load_config() -> SkillConfig:
         routes_dir=_get("routes_dir", "ROUTESMITH_ROUTES_DIR", ".routesmith/routes"),
         config_file=config_file,
         policy_overrides=file_config.get("policy_overrides", {}),
+        policy_plugins=_get("policy_plugins", "ROUTESMITH_POLICY_PLUGINS", [], list),
     )

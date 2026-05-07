@@ -10,10 +10,12 @@ import pytest
 
 from routesmith.config import load_config
 from routesmith.executor import Executor
+from routesmith.hosts.claude_code import ClaudeCodeHostAdapter
 from routesmith.metrics import RouteMetrics, compute_metrics
 from routesmith.planner import Planner
 from routesmith.state import list_routes, save_route
-from routesmith.types import SkillConfig, TaskType
+from routesmith.types import CapabilityClass, HostDetectionResult, SkillConfig, TaskType
+from routesmith.types import RoutingPreference
 
 
 class TestEndToEndPipeline:
@@ -67,6 +69,65 @@ class TestEndToEndPipeline:
         for task in result.tasks:
             assert task.duration_ms >= 0
 
+    def test_explain_applies_configured_policy_overrides(self):
+        config = SkillConfig(policy_overrides={"planning": "balanced"})
+        executor = Executor(config=config)
+        adapter = ClaudeCodeHostAdapter()
+
+        with (
+            patch(
+                "routesmith.executor.detect_host",
+                return_value=HostDetectionResult(
+                    host_name="claude_code",
+                    confidence=1.0,
+                    detection_method="test",
+                ),
+            ),
+            patch("routesmith.executor.get_host_adapter", return_value=adapter),
+        ):
+            plan = executor.explain("plan the architecture")
+
+        planning_tasks = [task for task in plan.tasks if task.type == TaskType.PLANNING]
+        assert planning_tasks
+        assert planning_tasks[0].preferred_capability_class == CapabilityClass.BALANCED
+        assert planning_tasks[0].suggested_model == adapter.resolve_capability_class(
+            CapabilityClass.BALANCED
+        )
+
+    def test_run_applies_routing_preference(self):
+        config = SkillConfig(forced_host="generic", routing_preference=RoutingPreference.COST)
+        executor = Executor(config=config)
+        result = executor.run("plan and implement a feature")
+
+        planning_tasks = [task for task in result.raw_plan.tasks if task.type == TaskType.PLANNING]
+        assert planning_tasks
+        assert planning_tasks[0].preferred_capability_class == CapabilityClass.BALANCED
+
+    def test_explain_applies_python_policy_plugins(self):
+        config = SkillConfig(
+            policy_plugins=["tests.sample_policy_plugin:PreferBalancedPlanningPlugin"],
+        )
+        executor = Executor(config=config)
+        adapter = ClaudeCodeHostAdapter()
+
+        with (
+            patch(
+                "routesmith.executor.detect_host",
+                return_value=HostDetectionResult(
+                    host_name="claude_code",
+                    confidence=1.0,
+                    detection_method="test",
+                ),
+            ),
+            patch("routesmith.executor.get_host_adapter", return_value=adapter),
+        ):
+            plan = executor.explain("plan the architecture")
+
+        planning_tasks = [task for task in plan.tasks if task.type == TaskType.PLANNING]
+        assert planning_tasks
+        assert planning_tasks[0].preferred_capability_class == CapabilityClass.BALANCED
+        assert any("[prefer_balanced_planning]" in msg for msg in plan.advisory)
+
 
 class TestPersistentState:
     """Test route saving/loading with temp directories."""
@@ -79,7 +140,14 @@ class TestPersistentState:
 
             routes = list_routes(config.routes_dir)
             assert len(routes) == 1
-            assert routes[0]["host"] in ("claude_code", "codex", "copilot", "aider", "unknown")
+            assert routes[0]["host"] in (
+                "claude_code",
+                "codex",
+                "gemini_cli",
+                "copilot",
+                "aider",
+                "unknown",
+            )
 
     def test_multiple_routes_saved(self):
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -125,6 +193,41 @@ default_mode = "plan"
             ):
                 config = load_config()
                 assert config.default_mode == "fast"
+
+    def test_loads_policy_overrides_from_toml(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            config_content = """[routesmith]
+default_mode = "auto"
+
+[routesmith.policy_overrides]
+planning = "balanced"
+deep_reasoning = "coding"
+"""
+            config_path = Path(tmpdir) / ".routesmith.toml"
+            config_path.write_text(config_content)
+
+            with patch("routesmith.config.Path.cwd", return_value=Path(tmpdir)):
+                config = load_config()
+                assert config.policy_overrides == {
+                    "planning": "balanced",
+                    "deep_reasoning": "coding",
+                }
+
+    def test_loads_routing_preference_and_plugins_from_toml(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            config_content = """[routesmith]
+routing_preference = "cost"
+policy_plugins = ["tests.sample_policy_plugin:PreferBalancedPlanningPlugin"]
+"""
+            config_path = Path(tmpdir) / ".routesmith.toml"
+            config_path.write_text(config_content)
+
+            with patch("routesmith.config.Path.cwd", return_value=Path(tmpdir)):
+                config = load_config()
+                assert config.routing_preference == RoutingPreference.COST
+                assert config.policy_plugins == [
+                    "tests.sample_policy_plugin:PreferBalancedPlanningPlugin"
+                ]
 
 
 class TestMetricsComputation:

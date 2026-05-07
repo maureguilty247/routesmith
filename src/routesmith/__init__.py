@@ -1,4 +1,4 @@
-"""routesmith - Host-aware auto-routing skill library for IDEs and coding agents."""
+"""routesmith - Host-aware model routing for coding agents and agentic IDE hosts."""
 
 from importlib.metadata import PackageNotFoundError, version as package_version
 from pathlib import Path
@@ -8,6 +8,7 @@ from routesmith.types import (
     HostCapabilities,
     HostDetectionResult,
     InstallResult,
+    RoutingPreference,
     RoutePlan,
     RunResult,
     SkillConfig,
@@ -17,6 +18,7 @@ from routesmith.types import (
 )
 from routesmith.executor import Executor
 from routesmith.planner import Planner
+from routesmith.policy_plugins import BasePolicyPlugin, PolicyPluginContext, PolicyPluginResult
 from routesmith.router import Router
 from routesmith.hosts.detector import detect_host, get_host_capabilities
 
@@ -50,12 +52,16 @@ __all__ = [
     "HostCapabilities",
     "HostDetectionResult",
     "InstallResult",
+    "RoutingPreference",
     "RoutePlan",
     "RunResult",
     "SkillConfig",
     "TaskNode",
     "TaskResult",
     "TaskType",
+    "BasePolicyPlugin",
+    "PolicyPluginContext",
+    "PolicyPluginResult",
     "Executor",
     "Planner",
     "Router",

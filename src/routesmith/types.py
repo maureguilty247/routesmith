@@ -5,7 +5,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class TaskType(str, Enum):
@@ -28,6 +28,14 @@ class CapabilityClass(str, Enum):
     CODING = "coding"
     BALANCED = "balanced"
     FAST = "fast"
+
+
+class RoutingPreference(str, Enum):
+    """Built-in routing preferences that shape model selection."""
+
+    BALANCED = "balanced"
+    COST = "cost"
+    QUALITY = "quality"
 
 
 class TaskNode(BaseModel):
@@ -120,6 +128,17 @@ class SkillConfig(BaseModel):
 
     default_mode: str = "auto"
     allow_model_switch: bool = True
+    routing_preference: RoutingPreference = RoutingPreference.BALANCED
+
+    @field_validator("routing_preference", mode="before")
+    @classmethod
+    def _normalize_routing_preference(cls, v: Any) -> str:
+        if isinstance(v, RoutingPreference):
+            return v.value
+        normalized = str(v).strip().lower().replace("-", "_").replace(" ", "_")
+        if normalized not in {p.value for p in RoutingPreference}:
+            return RoutingPreference.BALANCED.value
+        return normalized
     debug: bool = False
     telemetry_enabled: bool = False
     forced_host: str | None = None
@@ -129,3 +148,4 @@ class SkillConfig(BaseModel):
     routes_dir: str = ".routesmith/routes"
     config_file: str | None = None
     policy_overrides: dict[str, str] = Field(default_factory=dict)
+    policy_plugins: list[str] = Field(default_factory=list)

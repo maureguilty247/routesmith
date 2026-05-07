@@ -242,13 +242,13 @@ def serve_stdio_cmd() -> None:
 @install_app.callback(invoke_without_command=True)
 def install_default(
     ctx: typer.Context,
-    target: str | None = typer.Argument(None, help="Target host (claude, codex, copilot, cursor, vscode, aider)."),
+    target: str | None = typer.Argument(None, help="Target host (claude, codex, gemini, copilot, cursor, vscode, aider)."),
 ) -> None:
     """Install routesmith configuration for a target host."""
     if ctx.invoked_subcommand is not None:
         return
     if target is None:
-        console.print("[yellow]Specify a target: claude, codex, copilot, cursor, vscode, aider[/yellow]")
+        console.print("[yellow]Specify a target: claude, codex, gemini, copilot, cursor, vscode, aider[/yellow]")
         raise typer.Exit(1)
     _run_install(target)
 
@@ -263,6 +263,12 @@ def install_claude() -> None:
 def install_codex() -> None:
     """Install routesmith for Codex."""
     _run_install("codex")
+
+
+@install_app.command("gemini")
+def install_gemini() -> None:
+    """Install routesmith for Gemini CLI."""
+    _run_install("gemini")
 
 
 @install_app.command("copilot")

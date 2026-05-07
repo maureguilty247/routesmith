@@ -2,14 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.1.2] - Unreleased
+## [0.1.4] - Unreleased
 
 ### Added
 - GitHub Release badge and direct release asset links in the README.
 - GitHub Release asset fallback install instructions for environments where PyPI is unavailable.
+- Config-driven `policy_overrides` support in `.routesmith.toml` for task-type and capability remapping.
+- Built-in `routing_preference` support for cost-aware and quality-first routing on the main router path.
+- Python policy plugins loaded from `.routesmith.toml` import specs.
+- Gemini CLI host detection, routing, and installer support.
 
 ### Changed
 - Future GitHub Releases now automatically attach versioned artifacts plus stable `latest` asset aliases.
+- Router resolution now applies configured policy overrides during `run` and `explain` flows.
+- Package metadata and README host coverage now include Gemini CLI.
 
 ## [0.1.1] - 2026-05-07
 

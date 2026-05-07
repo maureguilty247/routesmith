@@ -13,6 +13,7 @@ def _get_all_adapters() -> list[BaseHostAdapter]:
     """Get all available host adapters in priority order."""
     from routesmith.hosts.claude_code import ClaudeCodeHostAdapter
     from routesmith.hosts.codex import CodexHostAdapter
+    from routesmith.hosts.gemini_cli import GeminiCLIHostAdapter
     from routesmith.hosts.copilot import CopilotHostAdapter
     from routesmith.hosts.cursor import CursorHostAdapter
     from routesmith.hosts.aider import AiderHostAdapter
@@ -21,6 +22,7 @@ def _get_all_adapters() -> list[BaseHostAdapter]:
     return [
         ClaudeCodeHostAdapter(),
         CodexHostAdapter(),
+        GeminiCLIHostAdapter(),
         CopilotHostAdapter(),
         CursorHostAdapter(),
         AiderHostAdapter(),

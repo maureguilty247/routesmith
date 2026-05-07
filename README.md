@@ -21,7 +21,7 @@
 
 ## Why?
 
-Most coding agents are stuck on one model. Mixed tasks (plan → code → test → document) benefit from different model strengths. But each IDE host (Claude Code, Codex, Copilot, Cursor, Aider) has different model families and switching capabilities.
+Most coding agents are stuck on one model. Mixed tasks (plan -> code -> test -> document) benefit from different model strengths. But each IDE host (Claude Code, Codex, Gemini CLI, Copilot, Cursor, Aider) has different model families and switching capabilities.
 
 **routesmith solves this** by being host-aware:
 
@@ -29,21 +29,18 @@ Most coding agents are stuck on one model. Mixed tasks (plan → code → test �
 |------|--------|----------|
 | Claude Code | Claude Opus 4.7 / Sonnet 4.6 / Haiku 4.5 | Dynamic model switching |
 | Codex | GPT-5.5 / GPT-5.4 / GPT-5.3-Codex | Dynamic model switching |
+| Gemini CLI | Gemini 3.1 Pro / Flash / Flash-Lite | Dynamic model switching |
 | Copilot | Claude 4.7 / GPT-5.5 / Gemini 3.1 Pro (plan-dependent) | Prompt optimization |
 | Cursor | Claude 4.7 / GPT-5.5 / GPT-5.3-Codex / Gemini 3.1 Pro | Prompt optimization |
 | Aider | Claude 4.7 / GPT-5.5 / Gemini 3.1 Pro | Dynamic model switching |
 
 ## Quickstart
 
-```bash
-pip install routesmith
-```
+Install from PyPI with `pip install routesmith`.
 
 If PyPI is unavailable or you want to install from the GitHub-hosted release artifacts instead, use the latest release source archive:
 
-```bash
-pip install https://github.com/sidrat2612/routesmith/releases/latest/download/routesmith-latest.tar.gz
-```
+Use `pip install https://github.com/sidrat2612/routesmith/releases/latest/download/routesmith-latest.tar.gz`.
 
 Direct downloads:
 
@@ -51,57 +48,40 @@ Direct downloads:
 - [Latest wheel asset](https://github.com/sidrat2612/routesmith/releases/latest/download/routesmith-latest-py3-none-any.whl)
 - [Latest source asset](https://github.com/sidrat2612/routesmith/releases/latest/download/routesmith-latest.tar.gz)
 
-```python
-import routesmith
+Core Python entry points:
 
-# Auto-detect host, decompose, route, execute
-result = routesmith.run("Plan and implement a REST API with tests")
-
-# Just see the plan without executing
-plan = routesmith.explain_route("Refactor the database layer")
-
-# Check what you're running on
-host = routesmith.detect_host()
-caps = routesmith.get_host_capabilities()
-```
+- `routesmith.run(...)` auto-detects the host, decomposes the prompt, and executes the route.
+- `routesmith.explain_route(...)` shows the route plan without execution.
+- `routesmith.detect_host()` and `routesmith.get_host_capabilities()` expose the detected environment.
 
 ### CLI
 
-```bash
-# Route a prompt
-routesmith run "Plan this feature, implement it, add tests, and write docs"
+Common CLI commands:
 
-# Preview the route plan
-routesmith explain "Refactor auth module and add integration tests"
-
-# Diagnostics
-routesmith detect-host
-routesmith capabilities
-routesmith doctor
-```
+- Route a mixed task prompt with `routesmith run "Plan this feature, implement it, add tests, and write docs"`.
+- Preview the route plan with `routesmith explain "Refactor auth module and add integration tests"`.
+- Inspect the environment with `routesmith detect-host`, `routesmith capabilities`, and `routesmith doctor`.
 
 ## How It Works
 
 routesmith is an **advisory routing layer** — it plans and recommends, it does not replace your host's execution engine.
 
-```
-┌─────────────────────────────────────────┐
-│           Your Prompt                   │
-├─────────────────────────────────────────┤
-│  1. Detect host (Claude Code? Copilot?) │
-│  2. Decompose into typed subtasks       │
-│  3. Map tasks → capability classes      │
-│  4. Resolve to host-native models       │
-│  5. Switch models or optimize prompts   │
-│  6. Report metrics & effectiveness      │
-└─────────────────────────────────────────┘
-```
+Execution flow:
+
+1. Detect the active host, such as Claude Code or Copilot.
+2. Decompose the prompt into typed subtasks.
+3. Map each task to a capability class.
+4. Resolve those capabilities to host-native models.
+5. Switch models when possible, or optimize prompts when not.
+6. Report metrics, advisory messages, and effectiveness.
 
 ### What it does
 
 - **Decomposes** mixed prompts into discrete, typed subtasks
 - **Routes** each subtask to the best capability class (`deep_reasoning`, `coding`, `balanced`, `fast`)
-- **Switches models** when the host supports it (Claude Code, Codex, Aider)
+- **Switches models** when the host supports it (Claude Code, Codex, Gemini CLI, Aider)
+- **Applies routing preferences** such as `cost` or `quality` on the same router path
+- **Runs Python policy plugins** when you need logic beyond static remaps
 - **Falls back to prompt optimization** when the host controls model selection
 - **Reports** timing, token estimates, effectiveness scores
 
@@ -149,19 +129,19 @@ Dependencies are resolved automatically — tests wait for code, docs wait for i
 
 Create `.routesmith.toml` in your project root:
 
-```toml
-[routesmith]
-default_mode = "auto"
-allow_model_switch = true
-```
+Recommended config shape:
+
+- Add a `[routesmith]` section with values such as `default_mode = "auto"`, `allow_model_switch = true`, and `routing_preference = "cost"` when you want cheaper model selection.
+- Add a `[routesmith.policy_overrides]` section when you want static remaps such as `planning = "balanced"` or `documentation = "fast"`.
+- Add a `policy_plugins` list when you want importable Python hooks such as `my_project.routing:plugin` or `my_project.routing:CustomPlugin` to participate in route resolution.
+
+Built-in routing preferences are `balanced`, `cost`, and `quality`. `policy_overrides` handles static remaps, while `policy_plugins` lets you run real Python logic that can adjust capability classes, force explicit models, and attach advisory messages.
 
 ## MCP / Stdio Server
 
 routesmith exposes an MCP-compatible JSON-RPC 2.0 server for tool integration:
 
-```bash
-routesmith serve-stdio
-```
+Start it with `routesmith serve-stdio`.
 
 This lets IDE extensions and agents call routesmith as a tool.
 
@@ -169,13 +149,12 @@ This lets IDE extensions and agents call routesmith as a tool.
 
 Generate host-specific configuration files:
 
-```bash
-routesmith install claude    # Writes CLAUDE.md
-routesmith install codex     # Writes AGENTS.md
-routesmith install copilot   # Writes .github/copilot-instructions.md
-routesmith install cursor    # Writes .cursorrules
-routesmith install aider     # Writes .aider.conf.yml
-```
+- `routesmith install claude` writes `CLAUDE.md`.
+- `routesmith install codex` writes `AGENTS.md`.
+- `routesmith install gemini` writes `GEMINI.md`.
+- `routesmith install copilot` writes `.github/copilot-instructions.md`.
+- `routesmith install cursor` writes `.cursorrules`.
+- `routesmith install aider` writes `.aider.conf.yml`.
 
 ## Auto Mode (Default)
 
@@ -198,14 +177,13 @@ Auto mode is the default. For a single mixed prompt, routesmith:
 
 Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-```bash
-# Development setup
-git clone https://github.com/sidrat2612/routesmith.git
-cd routesmith
-python -m venv .venv && source .venv/bin/activate
-pip install -e ".[dev]"
-pytest
-```
+Development setup:
+
+1. Clone the repository from `https://github.com/sidrat2612/routesmith.git`.
+2. Change into the `routesmith` directory.
+3. Create and activate a virtual environment with `python -m venv .venv` and `source .venv/bin/activate`.
+4. Install dev dependencies with `pip install -e ".[dev]"`.
+5. Run the test suite with `pytest`.
 
 ## Roadmap
 
@@ -215,9 +193,11 @@ pytest
 - [x] Persistent route state
 - [x] MCP stdio server
 - [x] Structured observability
+- [x] Config-driven policy overrides
+- [x] Cost-aware routing
+- [x] Python policy plugins
+- [x] Gemini CLI host adapter
 - [ ] Real-time model performance tracking
-- [ ] Cost-aware routing
-- [ ] Custom policy plugins
 - [ ] Additional host adapters
 
 ## License

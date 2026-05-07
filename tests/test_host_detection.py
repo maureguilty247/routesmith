@@ -51,6 +51,12 @@ class TestHostDetection:
         result = detect_host(config)
         assert result.confidence > 0
 
+    @patch.dict(os.environ, {"GEMINI_CLI": "1"}, clear=False)
+    def test_gemini_cli_detected(self):
+        config = SkillConfig()
+        result = detect_host(config)
+        assert result.confidence > 0
+
 
 class TestHostAdapter:
     """Test host adapter resolution."""
@@ -66,6 +72,12 @@ class TestHostAdapter:
         assert adapter is not None
         caps = adapter.get_capabilities()
         assert caps.host_name == "generic"
+
+    def test_gemini_adapter_available(self):
+        config = SkillConfig(forced_host="gemini_cli")
+        adapter = get_host_adapter(config)
+        caps = adapter.get_capabilities()
+        assert caps.host_name == "gemini_cli"
 
 
 class TestHostDetectionGraceful:

@@ -8,6 +8,7 @@ from routesmith.types import (
     CapabilityClass,
     HostCapabilities,
     HostDetectionResult,
+    RoutingPreference,
     RoutePlan,
     TaskNode,
 )
@@ -50,6 +51,14 @@ class BaseHostAdapter(ABC):
     def resolve_capability_class(self, capability: CapabilityClass) -> str | None:
         """Resolve a capability class to the best available model name."""
         ...
+
+    def resolve_model_for_capability(
+        self,
+        capability: CapabilityClass,
+        routing_preference: RoutingPreference | str = RoutingPreference.BALANCED,
+    ) -> str | None:
+        """Resolve a capability to a model while allowing richer router inputs."""
+        return self.resolve_capability_class(capability)
 
     def apply_prompt_strategy(self, task: TaskNode) -> dict:
         """Generate prompt strategy hints for a task when model switching is unavailable."""

@@ -36,7 +36,7 @@ class Executor:
 
         plan = self.planner.plan(prompt, host_name=detection.host_name)
 
-        router = Router(adapter)
+        router = Router(adapter, config=self.config)
         plan = router.resolve_plan(plan)
 
         # Generate advisory
@@ -70,7 +70,7 @@ class Executor:
 
         # Route (timed)
         t_route_start = time.perf_counter()
-        router = Router(adapter)
+        router = Router(adapter, config=self.config)
         plan = router.resolve_plan(plan)
 
         # Handle pinned model

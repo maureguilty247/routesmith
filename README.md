@@ -19,6 +19,8 @@
 
 > Give it a mixed prompt like *"Plan this feature, implement it, add tests, write docs"* and it decomposes, routes each step to the right capability class, and executes using your host's native model switching.
 
+![RouteSmith hero — one prompt branches into multiple task-specific workstreams](https://raw.githubusercontent.com/sidrat2612/routesmith/main/assets/hero.png)
+
 ## Why?
 
 Most coding agents are stuck on one model. Mixed tasks (plan -> code -> test -> document) benefit from different model strengths. But each IDE host (Claude Code, Codex, Gemini CLI, Copilot, Cursor, Aider) has different model families and switching capabilities.
@@ -33,6 +35,8 @@ Most coding agents are stuck on one model. Mixed tasks (plan -> code -> test -> 
 | Copilot | Claude 4.7 / GPT-5.5 / Gemini 3.1 Pro (plan-dependent) | Prompt optimization |
 | Cursor | Claude 4.7 / GPT-5.5 / GPT-5.3-Codex / Gemini 3.1 Pro | Prompt optimization |
 | Aider | Claude 4.7 / GPT-5.5 / Gemini 3.1 Pro | Dynamic model switching |
+
+![Where RouteSmith fits — agent products, routing layer, API gateway infrastructure](https://raw.githubusercontent.com/sidrat2612/routesmith/main/assets/positioning.png)
 
 ## Quickstart
 
@@ -77,6 +81,8 @@ Execution flow:
 4. Resolve those capabilities to host-native models.
 5. Switch models when possible, or optimize prompts when not.
 6. Report metrics, advisory messages, and effectiveness.
+
+![RouteSmith routing flow — detect host, classify prompt, map capability, route, execute, telemetry feedback](https://raw.githubusercontent.com/sidrat2612/routesmith/main/assets/flow.png)
 
 ### What it does
 

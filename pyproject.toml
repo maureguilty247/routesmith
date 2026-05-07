@@ -41,9 +41,9 @@ all = ["routesmit[dev]"]
 routesmit = "routesmit.cli:app_entry"
 
 [project.urls]
-Homepage = "https://github.com/routesmit/routesmit"
-Repository = "https://github.com/routesmit/routesmit"
-Issues = "https://github.com/routesmit/routesmit/issues"
+Homepage = "https://github.com/sidrat2612/routesmith"
+Repository = "https://github.com/sidrat2612/routesmith"
+Issues = "https://github.com/sidrat2612/routesmith/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/routesmit"]

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import re
-import uuid
 from typing import Sequence
 
 from routesmit.types import CapabilityClass, RoutePlan, TaskNode, TaskType

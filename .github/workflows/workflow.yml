@@ -34,6 +34,7 @@ jobs:
 
       - name: Build distributions
         run: |
+          rm -rf dist
           python -m pip install --upgrade build twine
           python -m build
           python -m twine check dist/*
@@ -43,6 +44,37 @@ jobs:
         with:
           name: python-package-distributions
           path: dist/
+
+  attach-release-assets:
+    name: Attach assets to GitHub Release
+    if: github.event_name == 'release'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download distributions
+        uses: actions/download-artifact@v6
+        with:
+          name: python-package-distributions
+          path: dist/
+
+      - name: Prepare release assets
+        run: |
+          mkdir -p release-assets
+          cp dist/* release-assets/
+
+          wheel=$(find dist -maxdepth 1 -name 'routesmith-*.whl' | head -n 1)
+          sdist=$(find dist -maxdepth 1 -name 'routesmith-*.tar.gz' | head -n 1)
+
+          # Stable aliases power README download/install links for the latest release.
+          cp "$wheel" release-assets/routesmith-latest-py3-none-any.whl
+          cp "$sdist" release-assets/routesmith-latest.tar.gz
+
+      - name: Upload release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ github.event.release.tag_name }}" release-assets/* --clobber
 
   publish-testpypi:
     name: Upload release to TestPyPI

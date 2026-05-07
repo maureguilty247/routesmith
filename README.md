@@ -5,6 +5,7 @@
   </p>
   <p align="center">
     <a href="https://pypi.org/project/routesmith/"><img src="https://img.shields.io/pypi/v/routesmith?color=blue&label=PyPI" alt="PyPI version"></a>
+    <a href="https://github.com/sidrat2612/routesmith/releases/latest"><img src="https://img.shields.io/github/v/release/sidrat2612/routesmith?display_name=tag&label=GitHub%20Release" alt="GitHub Release"></a>
     <a href="https://github.com/sidrat2612/routesmith/actions/workflows/ci.yml"><img src="https://github.com/sidrat2612/routesmith/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
     <a href="https://pypi.org/project/routesmith/"><img src="https://img.shields.io/pypi/pyversions/routesmith" alt="Python versions"></a>
     <a href="https://github.com/sidrat2612/routesmith/blob/main/LICENSE"><img src="https://img.shields.io/github/license/sidrat2612/routesmith" alt="License"></a>
@@ -37,6 +38,18 @@ Most coding agents are stuck on one model. Mixed tasks (plan → code → test �
 ```bash
 pip install routesmith
 ```
+
+If PyPI is unavailable or you want to install from the GitHub-hosted release artifacts instead, use the latest release source archive:
+
+```bash
+pip install https://github.com/sidrat2612/routesmith/releases/latest/download/routesmith-latest.tar.gz
+```
+
+Direct downloads:
+
+- [Latest GitHub release page](https://github.com/sidrat2612/routesmith/releases/latest)
+- [Latest wheel asset](https://github.com/sidrat2612/routesmith/releases/latest/download/routesmith-latest-py3-none-any.whl)
+- [Latest source asset](https://github.com/sidrat2612/routesmith/releases/latest/download/routesmith-latest.tar.gz)
 
 ```python
 import routesmith

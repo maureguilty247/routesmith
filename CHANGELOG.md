@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.2] - Unreleased
+
+### Added
+- GitHub Release badge and direct release asset links in the README.
+- GitHub Release asset fallback install instructions for environments where PyPI is unavailable.
+
+### Changed
+- Future GitHub Releases now automatically attach versioned artifacts plus stable `latest` asset aliases.
+
 ## [0.1.1] - 2026-05-07
 
 ### Changed

